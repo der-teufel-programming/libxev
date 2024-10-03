@@ -205,7 +205,7 @@ fn benchTargets(
 
     // Open the directory
     const c_dir_path = "src/bench";
-    var c_dir = try std.fs.cwd().openDir(comptime thisDir() ++ "/" ++ c_dir_path, .{ .iterate = true });
+    var c_dir = try b.build_root.handle.openDir(c_dir_path, .{ .iterate = true });
     defer c_dir.close();
 
     // Go through and add each as a step
@@ -261,8 +261,8 @@ fn exampleTargets(
     if (!install) return;
 
     // Open the directory
-    const c_dir_path = (comptime thisDir()) ++ "/examples";
-    var c_dir = try std.fs.cwd().openDir(c_dir_path, .{ .iterate = true });
+    const c_dir_path = "examples";
+    var c_dir = try b.build_root.handle.openDir(c_dir_path, .{ .iterate = true });
     defer c_dir.close();
 
     // Go through and add each as a step
