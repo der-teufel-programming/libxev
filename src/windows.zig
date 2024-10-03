@@ -102,6 +102,7 @@ pub const exp = struct {
             lpJobObjectInformation: windows.LPVOID,
             cbJobObjectInformationLength: windows.DWORD,
         ) callconv(windows.WINAPI) windows.BOOL;
+        pub extern "kernel32" fn DeleteFileW(name: [*:0]const u16) windows.BOOL;
     };
 
     pub const CreateFileError = error{} || posix.UnexpectedError;
@@ -165,7 +166,7 @@ pub const exp = struct {
     pub const DeleteFileError = error{} || posix.UnexpectedError;
 
     pub fn DeleteFile(name: [*:0]const u16) DeleteFileError!void {
-        const result: windows.BOOL = windows.kernel32.DeleteFileW(name);
+        const result: windows.BOOL = kernel32.DeleteFileW(name);
         if (result == windows.FALSE) {
             const err = windows.kernel32.GetLastError();
             return switch (err) {
