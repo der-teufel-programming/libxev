@@ -15,7 +15,7 @@ pub const Timerfd = struct {
 
     /// timerfd_create
     pub fn init(clock: Clock, flags: linux.TFD) !Timerfd {
-        const res = linux.timerfd_create(@intFromEnum(clock), flags);
+        const res = linux.timerfd_create(@enumFromInt(@intFromEnum(clock)), flags);
         return switch (posix.errno(res)) {
             .SUCCESS => .{ .fd = @as(i32, @intCast(res)) },
             else => error.UnknownError,
@@ -59,7 +59,7 @@ pub const Timerfd = struct {
     /// The clocks available for a Timerfd. This is a non-exhaustive enum
     /// so that unsupported values can be attempted to be passed into the
     /// system calls.
-    pub const Clock = enum(i32) {
+    pub const Clock = enum(u32) {
         realtime = 0,
         monotonic = 1,
         boottime = 7,
